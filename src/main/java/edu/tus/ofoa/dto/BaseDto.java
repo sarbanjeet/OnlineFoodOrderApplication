@@ -3,7 +3,9 @@ package edu.tus.ofoa.dto;
 import java.time.LocalDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@Relation(collectionRelation = "entities")
 public abstract class BaseDto extends RepresentationModel<BaseDto> {
 
 	private Long id;

@@ -20,6 +20,10 @@ public class OrderItemService {
     @Autowired
     private OrderItemRepository OrderItemRepository;
 
+    public OrderItemService(edu.tus.ofoa.repository.OrderItemRepository orderItemRepository) {
+        OrderItemRepository = orderItemRepository;
+    }
+
     public List<OrderItem> getAllOrderItems() {
         return OrderItemRepository.findAll();
     }

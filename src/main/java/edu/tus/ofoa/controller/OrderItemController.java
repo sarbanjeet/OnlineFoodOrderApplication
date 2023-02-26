@@ -27,6 +27,10 @@ public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
 
+    public OrderItemController(OrderItemService orderItemService) {
+        this.orderItemService = orderItemService;
+    }
+
     @GetMapping("")
     public List<OrderItem> getAllOrderItems() {
         return orderItemService.getAllOrderItems();

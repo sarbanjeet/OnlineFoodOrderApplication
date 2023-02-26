@@ -1,13 +1,11 @@
 package edu.tus.ofoa.dto;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import org.springframework.hateoas.Link;
-
-import edu.tus.ofoa.controller.OrderController;
 import edu.tus.ofoa.controller.OrderItemController;
 import edu.tus.ofoa.entity.OrderItem;
+import org.springframework.hateoas.Link;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class OrderItemDto extends BaseDto {
 
@@ -46,6 +44,8 @@ public class OrderItemDto extends BaseDto {
 		this.setQuantity(orderItem.getQuantity());
 		this.setPrice(orderItem.getPrice());
 		this.setName(orderItem.getName());
+		this.setCreatedAt(orderItem.getCreatedAt());
+		this.setUpdatedAt(orderItem.getUpdatedAt());
 		
 		Link selfLink = linkTo(methodOn(OrderItemController.class).getOrderItemById(orderItem.getId())).withSelfRel();
 		this.add(selfLink);

@@ -15,8 +15,6 @@ import edu.tus.ofoa.entity.OrderItem;
 public class OrdersDto extends BaseDto {
 	private double TotalPrice;
 	private List<OrderItemDto> orderItems;
-	private List<Link> orderLinks;
-
 	public double getTotalPrice() {
 		return TotalPrice;
 	}
@@ -33,24 +31,19 @@ public class OrdersDto extends BaseDto {
 		this.orderItems = orderItems;
 	}
 
-	public List<Link> getOrderLinks() {
-		return orderLinks;
-	}
-
-	public void setOrderLinks(List<Link> orderLinks) {
-		this.orderLinks = orderLinks;
-	}
-
 	public void toOrderDto(Order order) {
 		this.setId(order.getId());
 		this.setTotalPrice(order.getTotalPrice());
+		this.setCreatedAt(order.getCreatedAt());
+		this.setUpdatedAt(order.getUpdatedAt());
+
 		if (order.getOrderItems() != null) {
 			List<OrderItemDto> orderItemDtos = order.getOrderItems().stream().map(this::toOrderItemDto)
 					.collect(Collectors.toList());
 			this.setOrderItems(orderItemDtos);
 		}
 		Link selfLink = linkTo(methodOn(OrderController.class).getOrderById(order.getId())).withSelfRel();
-		order.add(selfLink);
+		this.add(selfLink);
 	}
 
 	public OrderItemDto toOrderItemDto(OrderItem orderItem) {

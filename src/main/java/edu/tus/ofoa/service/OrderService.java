@@ -21,7 +21,11 @@ public class OrderService  {
     @Autowired
     private OrderRepository orderRepository;
 
-    
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }

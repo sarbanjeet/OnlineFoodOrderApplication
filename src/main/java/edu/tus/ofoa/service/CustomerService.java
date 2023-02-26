@@ -20,6 +20,10 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }

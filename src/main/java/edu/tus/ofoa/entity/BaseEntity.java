@@ -1,14 +1,10 @@
 package edu.tus.ofoa.entity;
 import java.time.LocalDateTime;
 import javax.persistence.*;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
 
-@Relation(collectionRelation = "entities")
 @MappedSuperclass
-public abstract class BaseEntity extends RepresentationModel<BaseEntity> {
-	
-	
+public abstract class BaseEntity {
+
     @Id
     @GeneratedValue
     private Long id;

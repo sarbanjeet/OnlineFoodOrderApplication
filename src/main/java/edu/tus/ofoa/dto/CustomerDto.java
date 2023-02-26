@@ -1,5 +1,6 @@
 package edu.tus.ofoa.dto;
 
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -73,6 +74,9 @@ public class CustomerDto extends BaseDto {
         this.setId(customer.getId());
         this.setName(customer.getName());
         this.setEmail(customer.getEmail());
+		this.setCreatedAt(customer.getCreatedAt());
+		this.setUpdatedAt(customer.getUpdatedAt());
+
         if (customer.getOrders() != null) {
 			List<OrdersDto> orderDtos = customer.getOrders().stream()
                     .map(this::toOrderDto)

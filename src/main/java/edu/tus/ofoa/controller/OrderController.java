@@ -1,6 +1,5 @@
 package edu.tus.ofoa.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
 
@@ -8,7 +7,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +33,11 @@ public class OrderController {
 	@Autowired
 	private CustomerService customerService;
 
+	public OrderController(OrderService orderService, CustomerService customerService) {
+		this.orderService = orderService;
+		this.customerService = customerService;
+	}
+
 	@GetMapping("")
 	public List<Order> getAllOrders() {
 		return orderService.getAllOrders();
@@ -51,7 +54,7 @@ public class OrderController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {
+	public ResponseEntity<OrdersDto> createOrder(@Valid @RequestBody Order order) {
 
 		final Order orderObj = order;
 		orderObj.getOrderItems().forEach(orderItem -> orderItem.setOrder(orderObj));
@@ -62,9 +65,9 @@ public class OrderController {
 
 		orderService.createOrder(orderObj);
 
-		Link selfLink = linkTo(methodOn(OrderController.class).getOrderById(order.getId())).withSelfRel();
-		order.add(selfLink);
-		return new ResponseEntity<>(order, HttpStatus.OK);
+		var dto = new OrdersDto();
+		dto.toOrderDto(orderObj);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	@PutMapping("/{id}")
