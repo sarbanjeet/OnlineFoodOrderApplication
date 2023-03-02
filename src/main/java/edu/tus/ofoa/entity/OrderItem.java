@@ -26,6 +26,12 @@ public class OrderItem extends BaseEntity {
 
     public OrderItem() {}
 
+    public OrderItem(String name, double price, int quantity) {
+        this.price = price;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }

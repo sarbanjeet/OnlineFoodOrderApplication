@@ -15,7 +15,6 @@ import edu.tus.ofoa.repository.OrderRepository;
 
 @Service
 @Transactional
-@Primary
 public class OrderService  {
 
     @Autowired

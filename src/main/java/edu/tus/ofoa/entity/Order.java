@@ -27,6 +27,7 @@ public class Order extends BaseEntity {
         this.customer = customer;
         this.orderItems = orderItems;       
     }
+
     
     @PrePersist
     public void prePersistTotalPrice() {

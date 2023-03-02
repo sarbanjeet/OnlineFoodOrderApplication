@@ -25,6 +25,10 @@ public class Customer extends BaseEntity {
 
     public Customer() {}
 
+    public Customer(String name, String email) {
+        this.email = email;
+        this.name = name;
+    }
 
     public void addOrder(Order order) {
         orders.add(order);
