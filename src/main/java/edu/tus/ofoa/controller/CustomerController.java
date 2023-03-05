@@ -28,6 +28,10 @@ public class CustomerController {
     @Autowired
     private CustomerService CustomerService;
 
+    public CustomerController(edu.tus.ofoa.service.CustomerService customerService) {
+        CustomerService = customerService;
+    }
+
     @GetMapping("")
     public List<Customer> getAllCustomers() {
         return CustomerService.getAllCustomers();

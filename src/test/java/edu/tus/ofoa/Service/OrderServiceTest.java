@@ -5,7 +5,6 @@ import edu.tus.ofoa.entity.OrderItem;
 import edu.tus.ofoa.service.CustomerServiceImp;
 import edu.tus.ofoa.service.OrderService;
 import org.junit.Test;
-import org.junit.runner.OrderWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
 import static org.testng.AssertJUnit.assertEquals;
 
 @RunWith(SpringRunner.class)

@@ -33,6 +33,11 @@ public class OrderController {
 	@Autowired
 	private CustomerService customerService;
 
+	public OrderController(OrderService orderService, CustomerService customerService) {
+		this.orderService = orderService;
+		this.customerService = customerService;
+	}
+
 	@GetMapping("")
 	public List<Order> getAllOrders() {
 		return orderService.getAllOrders();
