@@ -2,7 +2,7 @@ package edu.tus.ofoa.Service;
 import edu.tus.ofoa.entity.Customer;
 import edu.tus.ofoa.entity.Order;
 import edu.tus.ofoa.entity.OrderItem;
-import edu.tus.ofoa.service.CustomerServiceImp;
+import edu.tus.ofoa.service.CustomerService;
 import edu.tus.ofoa.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,17 +16,15 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 public class OrderServiceTest {
     @Autowired
-    public CustomerServiceImp customerService;
+    public CustomerService customerService;
     @Autowired
     public OrderService orderService;
-
 
     @Test
     public void onlyCustomerModuleIsLoaded() {

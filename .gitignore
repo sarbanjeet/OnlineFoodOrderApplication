@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+/css/
+/img/
+/js/
+/ns-1/
+/ns-2/
+/ns-3/
+/ns-4/
+/ns-5/
+/ns-6/
+/.mvn/
