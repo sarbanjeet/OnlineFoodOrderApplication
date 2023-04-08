@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import edu.tus.ofoa.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.tus.ofoa.entity.OrderItem;
-import edu.tus.ofoa.service.OrderItemService;
 
 
 @RestController

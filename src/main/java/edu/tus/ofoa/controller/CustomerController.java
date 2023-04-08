@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,9 +29,6 @@ public class CustomerController {
     @Autowired
     private CustomerService CustomerService;
 
-    public CustomerController(edu.tus.ofoa.service.CustomerService customerService) {
-        CustomerService = customerService;
-    }
 
     @GetMapping("")
     public List<Customer> getAllCustomers() {
@@ -62,6 +60,6 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable(value = "id") Long CustomerId) throws EntityNotFoundException {
-        CustomerService.deleteCustomer(CustomerId);
+       CustomerService.deleteCustomer(CustomerId);
     }
 }

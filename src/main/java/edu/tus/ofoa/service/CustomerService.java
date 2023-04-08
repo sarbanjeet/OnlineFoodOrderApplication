@@ -1,20 +1,44 @@
 package edu.tus.ofoa.service;
 
-import edu.tus.ofoa.entity.Customer;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomerService {
+import javax.persistence.EntityNotFoundException;
 
-    public List<Customer> getAllCustomers();
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    public Optional<Customer> getCustomerById(Long id);
+import edu.tus.ofoa.entity.Customer;
+import edu.tus.ofoa.repository.CustomerRepository;
 
-    public Customer createCustomer(Customer customer);
+@Service
+@Transactional
+public class CustomerService {
+    @Autowired
+    private CustomerRepository customerRepository;
 
-    public Customer updateCustomer(Long id, Customer customer) ;
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
 
-    public void deleteCustomer(Long id);
+    public Optional<Customer> getCustomerById(Long id) {
+        return customerRepository.findById(id);
+    }
+
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    public Customer updateCustomer(Long id, Customer customer) throws EntityNotFoundException {
+        Customer existingCustomer = getCustomerById(id).orElseThrow(() -> new EntityNotFoundException("Customer not found with id " + id));
+        existingCustomer.setName(customer.getName());
+        existingCustomer.setEmail(customer.getEmail());
+        return customerRepository.save(existingCustomer);
+    }
+
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
+    }
 }

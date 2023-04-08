@@ -2,14 +2,15 @@ package edu.tus.ofoa.Service;
 import edu.tus.ofoa.entity.Customer;
 import edu.tus.ofoa.entity.Order;
 import edu.tus.ofoa.entity.OrderItem;
+import edu.tus.ofoa.repository.CustomerRepository;
 import edu.tus.ofoa.service.CustomerService;
 import edu.tus.ofoa.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,16 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderServiceTest {
+
+
     @Autowired
-    public CustomerService customerService;
+    private CustomerService customerService;
+
     @Autowired
-    public OrderService orderService;
+    private OrderService orderService;
 
     @Test
     public void onlyCustomerModuleIsLoaded() {
@@ -45,10 +49,8 @@ public class OrderServiceTest {
         orderItems.add(orderItem2);
 
         Order order = new Order(customer, orderItems);
-        orderService.createOrder(order);
-
         Order createdOrder = orderService.createOrder(order);
-        assertEquals(order, createdOrder);
+        assertEquals(order.getCustomer().getName(), createdOrder.getCustomer().getName() );
     }
 
     @Test

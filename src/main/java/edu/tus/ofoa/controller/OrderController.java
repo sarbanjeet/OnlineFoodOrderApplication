@@ -23,7 +23,6 @@ import edu.tus.ofoa.entity.Customer;
 import edu.tus.ofoa.entity.Order;
 import edu.tus.ofoa.service.CustomerService;
 import edu.tus.ofoa.service.OrderService;
-
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
