@@ -2,12 +2,15 @@ pipeline {
   agent any
 
   stages {
+   stage('Git pull') {
+    steps {
+           // Get some code from a GitHub repository
+           git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
+           }
+   }
     stage('Maven install') {
 
       steps {
-        // Get some code from a GitHub repository
-        git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
-
         // Run Maven on a Unix agent.
         // sh "mvn -Dmaven.test.failure.ignore=true clean package"
         withMaven(
@@ -27,7 +30,6 @@ pipeline {
     }
 
     stage('Docker Build') {
-      agent any
       steps {
         bat 'docker build -t online-food-order-application:latest .'
       }
