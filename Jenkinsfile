@@ -1,37 +1,78 @@
 pipeline {
   agent any
 
-  stages {
-   stage('Git pull') {
-    steps {
-           // Get some code from a GitHub repository
-           git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
-           }
-   }
-    stage('Maven install') {
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('docker_hub')
+  }
 
+  stages {
+    stage('Checkout') {
       steps {
-        // Run Maven on a Unix agent.
-        // sh "mvn -Dmaven.test.failure.ignore=true clean package"
+        git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
+      }
+    }
+    stage('Build') {
+      steps {
         withMaven(
           maven: 'Maven_Home'
         ) {
           // To run Maven on a Windows agent, use
-          bat "mvn -Dmaven.test.failure.ignore=true clean package"
+          sh "mvn package -Dmaven.test.skip"
         }
       }
+    }
 
-      post {
-        success {
+    stage('Test') {
+      steps {
+        withMaven(
+          maven: 'Maven_Home'
+        ) {
           junit '**/target/surefire-reports/TEST-*.xml'
           archiveArtifacts 'target/*.jar'
         }
       }
     }
 
-    stage('Docker Build') {
+    stage('Run Sonar Scanner') {
       steps {
-        bat 'docker build -t online-food-order-application:latest .'
+        withMaven(
+          maven: 'Maven_Home'
+        ) {
+          sh "mvn sonar:sonar"
+        }
+      }
+    }
+
+    stage('Docker Build Image') {
+      agent any
+      steps {
+        sh 'docker build -t online-food-order-application:latest .'
+      }
+    }
+
+    stage('Tag Docker Image') {
+      agent any
+      steps {
+        sh 'docker tag online-food-order-application:latest sarbanjeet/online-food-order-application:latest'
+      }
+    }
+
+    stage('Login Docker Hub') {
+      agent any
+      steps {
+        sh 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
+      }
+    }
+    stage('Push Docker Image') {
+      agent any
+      steps {
+        sh 'docker push sarbanjeet/online-food-order-application:latest'
+      }
+    }
+    stage('Deploy Web') {
+      agent any
+      steps {
+        sh 'ansible-playbook playbook.yml'
       }
     }
   }
