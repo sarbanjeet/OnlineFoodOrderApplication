@@ -1,0 +1,60 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('docker_hub')
+  }
+
+  stages {
+    stage('Maven install') {
+
+      steps {
+        // Get some code from a GitHub repository
+        git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
+
+        // Run Maven on a Unix agent.
+        // sh "mvn -Dmaven.test.failure.ignore=true clean package"
+        withMaven(
+          maven: 'Maven_Home'
+        ) {
+          // To run Maven on a Windows agent, use
+          sh "mvn -Dmaven.test.failure.ignore=true clean package"
+        }
+      }
+
+      post {
+        success {
+         sh "junit '**/target/surefire-reports/TEST-*.xml'"
+         sh "archiveArtifacts 'target/*.jar'"
+        }
+      }
+    }
+
+    stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t online-food-order-application:latest .'
+      }
+    }
+
+    stage('Docker image tag') {
+      agent any
+      steps {
+        bat 'docker tag online-food-order-application:latest sarbanjeet/online-food-order-application:latest'
+      }
+    }
+
+    stage('Login') {
+      agent any
+      steps {
+        bat 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
+      }
+    }
+    stage('Docker image push') {
+      agent any
+      steps {
+        bat 'docker push sarbanjeet/online-food-order-application:latest'
+      }
+    }
+  }
+}

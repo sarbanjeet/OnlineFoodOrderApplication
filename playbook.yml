@@ -1,0 +1,10 @@
+- name: Download and start Docker container
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Pull Docker image from Docker Hub
+      command: docker pull sarbanjeet/online-food-order-application:latest
+
+    - name: Start Docker container
+      command: docker run -d --name  ansible-docker-container -p 8089:8089 sarbanjeet/online-food-order-application:latest

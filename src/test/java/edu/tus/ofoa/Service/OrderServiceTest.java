@@ -2,14 +2,12 @@ package edu.tus.ofoa.Service;
 import edu.tus.ofoa.entity.Customer;
 import edu.tus.ofoa.entity.Order;
 import edu.tus.ofoa.entity.OrderItem;
-import edu.tus.ofoa.repository.CustomerRepository;
 import edu.tus.ofoa.service.CustomerService;
 import edu.tus.ofoa.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
