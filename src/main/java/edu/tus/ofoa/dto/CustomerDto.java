@@ -77,12 +77,12 @@ public class CustomerDto extends BaseDto {
 		this.setCreatedAt(customer.getCreatedAt());
 		this.setUpdatedAt(customer.getUpdatedAt());
 
-        if (customer.getOrders() != null) {
-			List<OrdersDto> orderDtos = customer.getOrders().stream()
-                    .map(this::toOrderDto)
-                    .collect(Collectors.toList());
-			this.setOrders(orderDtos);
-        }
+//        if (customer.getOrders().) {
+//			List<OrdersDto> orderDtos = customer.getOrders().stream()
+//                    .map(this::toOrderDto)
+//                    .collect(Collectors.toList());
+//			this.setOrders(orderDtos);
+//        }
         
         Link selfLink = linkTo(methodOn(CustomerController.class).getCustomerById(customer.getId())).withSelfRel();
 		this.add(selfLink);
