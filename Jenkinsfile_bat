@@ -38,7 +38,7 @@ pipeline {
         withMaven(
           maven: 'Maven_Home'
         ) {
-          bat 'mvn sonar:sonar -D"sonar.projectKey=OnlineFoodOrderApplication" -D"sonar.host.url=http://localhost:9000" -D"sonar.login=sqp_16b6c22829ca3f040f805bf27cae00458ca88b3b"'
+          bat 'mvn sonar:sonar -D"sonar.host.url=http://localhost:9000" -D"sonar.login=sqp_16b6c22829ca3f040f805bf27cae00458ca88b3b"'
         }
       }
     }
