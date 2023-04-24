@@ -33,15 +33,13 @@ pipeline {
       }
     }
 
-    stage('Run Sonar Scanner') {
-      steps {
-        withMaven(
-          maven: 'Maven_Home'
-        ) {
-          bat 'mvn sonar:sonar -X'
+    stage('SonarQube Analysis') {
+         withMaven(
+                  maven: 'Maven_Home'
+                )  {
+          bat "mvn clean verify sonar:sonar -Dsonar.projectKey=OnlineFoodOrderApplication"
         }
       }
-    }
 
     stage('Docker Build Image') {
       agent any
