@@ -6,12 +6,11 @@ pipeline {
   }
 
   stages {
-    stage('Checkout') {
+    stage('Pull and build') {
       steps {
         git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
       }
-    }
-    stage('Build') {
+
       steps {
         withMaven(
           maven: 'Maven_Home'
@@ -22,7 +21,7 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Run tests') {
       steps {
         withMaven(
           maven: 'Maven_Home'
@@ -34,42 +33,36 @@ pipeline {
     }
 
     stage('SonarQube Analysis') {
-        steps {  withMaven(
-                  maven: 'Maven_Home'
-                )  {
+      steps {
+        withMaven(
+          maven: 'Maven_Home'
+        ) {
           bat "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OnlineFoodOrderApplication"
         }
       }
-      }
+    }
 
-    stage('Docker Build Image') {
+    stage('Build docker image and tag') {
       agent any
       steps {
         bat 'docker build -t online-food-order-application:latest .'
       }
-    }
 
-    stage('Tag Docker Image') {
-      agent any
       steps {
         bat 'docker tag online-food-order-application:latest sarbanjeet/online-food-order-application:latest'
       }
-    }
 
-    stage('Login Docker Hub') {
-      agent any
       steps {
         bat 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
       }
     }
-    stage('Push Docker Image') {
+    stage('Push docker image') {
       agent any
       steps {
         bat 'docker push sarbanjeet/online-food-order-application:latest'
       }
     }
     stage('Deploy Web') {
-      agent any
       steps {
         bat 'ansible-playbook playbook.yml'
       }
