@@ -1,80 +1,75 @@
+  def remote = [: ]
+  remote.name = 'ansible_node'
+  remote.host = '18.205.158.252'
+  remote.user = 'ansadmin'
+  remote.password = 'ansadmin'
+  remote.allowAnyHosts = true
 
-     def remote = [:]
-          remote.name = 'ansible_node'
-          remote.host = '44.202.58.73'
-          remote.user = 'ansadmin'
-          remote.password = 'ansadmin'
-          remote.allowAnyHosts = true
+  pipeline {
+    agent any
 
-pipeline {
-  agent any
+    environment {
+      DOCKERHUB_CREDENTIALS = credentials('docker_hub')
 
-
-
-  environment {
-    DOCKERHUB_CREDENTIALS = credentials('docker_hub')
-
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
-      }
-    }
-    stage('Build') {
-      steps {
-        withMaven(
-          maven: 'Maven_Home'
-        ) {
-          // To run Maven on a Windows agent, use
-          bat "mvn package  -Dmaven.test.skip"
-        }
-      }
     }
 
-    stage('Unit Test') {
-      steps {
-        withMaven(
-          maven: 'Maven_Home'
-        ) {
-          junit '**/target/test-reports/*.xml'
-          archiveArtifacts 'target/*.jar'
-        }
-      }
-    }
-
-    stage('SonarQube Analysis') {
+    stages {
+      stage('Checkout') {
         steps {
-            withMaven(
-                  maven: 'Maven_Home'
-                )  {
-          bat "mvn clean verify sonar:sonar -Dsonar.projectKey=OnlineFoodOrderApplication"
+          git branch: 'main', url: 'https://github.com/sarbanjeet/OnlineFoodOrderApplication.git'
         }
       }
+      stage('Build') {
+        steps {
+          withMaven(
+            maven: 'Maven_Home'
+          ) {
+            // To run Maven on a Windows agent, use
+            bat "mvn package  -Dmaven.test.skip"
+          }
+        }
       }
 
-    stage('Docker Build Image') {
-      agent any
-      steps {
-        bat 'docker build -t online-food-order-application:latest .'
-        bat 'docker tag online-food-order-application:latest sarbanjeet/online-food-order-application:latest'
+      stage('Unit Test') {
+        steps {
+          withMaven(
+            maven: 'Maven_Home'
+          ) {
+            junit '**/target/test-reports/*.xml'
+            archiveArtifacts 'target/*.jar'
+          }
+        }
       }
-    }
 
-    stage('Push Docker Image') {
-      steps {
-        bat 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
-        bat 'docker push sarbanjeet/online-food-order-application:latest'
+      stage('SonarQube Analysis') {
+        steps {
+          withMaven(
+            maven: 'Maven_Home'
+          ) {
+            bat "mvn clean verify sonar:sonar -Dsonar.projectKey=OnlineFoodOrderApplication"
+          }
+        }
+      }
+
+      stage('Docker Build Image') {
+        agent any
+        steps {
+          bat 'docker build -t online-food-order-application:latest .'
+          bat 'docker tag online-food-order-application:latest sarbanjeet/online-food-order-application:latest'
+        }
+      }
+
+      stage('Push Docker Image') {
+        steps {
+          bat 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
+          bat 'docker push sarbanjeet/online-food-order-application:latest'
+        }
+      }
+
+      stage('Deploy') {
+        steps {
+          sshCommand remote: remote, command: "ansible-playbook /etc/ansible/playbook.yml"
+        }
       }
     }
   }
-}
-
-node
-{
-
-      stage('Remote SSH') {
-        sshCommand remote: remote, command: "ls -lrt"
-        sshCommand remote: remote, command: "for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done"
-      }}
