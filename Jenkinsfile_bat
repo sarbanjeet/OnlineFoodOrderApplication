@@ -1,8 +1,16 @@
 pipeline {
   agent any
 
+     def remote = [:]
+          remote.name = 'ansible_node'
+          remote.host = '44.202.58.73'
+          remote.user = 'ansadmin'
+          remote.password = 'ansadmin'
+          remote.allowAnyHosts = true
+
   environment {
     DOCKERHUB_CREDENTIALS = credentials('docker_hub')
+
   }
 
   stages {
@@ -58,12 +66,7 @@ pipeline {
       }
     }
 
-      def remote = [:]
-      remote.name = 'ansible_node'
-      remote.host = '44.202.58.73'
-      remote.user = 'ansadmin'
-      remote.password = 'ansadmin'
-      remote.allowAnyHosts = true
+
       stage('Remote SSH') {
         sshCommand remote: remote, command: "ls -lrt"
         sshCommand remote: remote, command: "for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done"
