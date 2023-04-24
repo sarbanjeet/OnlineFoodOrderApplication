@@ -4,7 +4,7 @@
 
   tasks:
     - name: Pull Docker image from Docker Hub
-      command: docker pull sarbanjeet/online-food-order-application:latest
+      command: docker pull sarbanjeet/online-food-order-application:latest1
 
     - name: Start Docker container
       command: docker run -d --name  ansible-docker-container -p 8089:8089 sarbanjeet/online-food-order-application:latest
