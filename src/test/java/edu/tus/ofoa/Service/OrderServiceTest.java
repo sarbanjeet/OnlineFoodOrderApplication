@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 public class OrderServiceTest {
 
-
     @Autowired
     private CustomerService customerService;
 
