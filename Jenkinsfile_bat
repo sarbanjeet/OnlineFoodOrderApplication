@@ -61,7 +61,7 @@
 
       stage('Push Docker Image') {
         steps {
-          bat 'echo | set /p="Sarbu@888" | docker login --username sarbanjeet --password-stdin'
+          bat 'echo | set /p="xxxxx" | docker login --username sarbanjeet --password-stdin'
           bat 'docker push sarbanjeet/online-food-order-application:latest'
         }
       }
