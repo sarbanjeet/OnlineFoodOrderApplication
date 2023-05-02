@@ -1,0 +1,55 @@
+server:
+  port: 8093
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "GET, POST, PUT, DELETE"
+    allowed-headers: "*"
+    allow-credentials: false
+    max-age: 3600
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8091/eureka}
+spring:
+  application:
+    name: API-GATEWAY
+  config:
+    import: configserver:http://localhost:8092
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      routes:
+        - id : RESTAURANT-SERVICE
+          uri: lb://RESTAURANT-SERVICE
+          predicates:
+            - Path=/api/v1/restaurants/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: RESTAURANT-SERVICE
+                fallbackuri: forward:/RestaurantApplicationFallBack
+        - id: FOOD-ORDER-APPLICATION
+          uri: lb://FOOD-ORDER-APPLICATION
+          predicates:
+            - Path=/api/v1/orders/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: FOOD-ORDER-APPLICATION
+                fallbackuri: forward:/FoodApplicationFallBack
+        - id: FOOD-ORDER-APPLICATION-Customer
+          uri: lb://FOOD-ORDER-APPLICATION
+          predicates:
+            - Path=/api/v1/customers/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: FOOD-ORDER-APPLICATION
+                fallbackuri: forward:/FoodApplicationFallBack
+
